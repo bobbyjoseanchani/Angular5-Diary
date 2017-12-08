@@ -1,0 +1,4 @@
+*.db
+*.pyc
+diary
+__pycache__

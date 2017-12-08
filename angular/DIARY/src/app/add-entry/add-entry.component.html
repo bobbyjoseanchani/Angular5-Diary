@@ -1,0 +1,21 @@
+<mat-card class="full-width" >
+	<h2>{{ myDate | date }}</h2>
+	<form (ngSubmit)="saveEntry()" [formGroup]="entryForm" >
+		<mat-card-content>
+			<mat-form-field class="full-width">
+				<input matInput placeholder="Title" formControlName="title"/>
+			</mat-form-field>
+			<mat-form-field class="full-width">
+				<textarea matInput placeholder="Text" formControlName="text"></textarea>
+			</mat-form-field>
+		</mat-card-content>
+		<mat-card-actions>
+			<button mat-mini-fab class="icon-button" color="primary" type="submit" [disabled]="!entryForm.valid">
+				<mat-icon aria-label="save entry">save</mat-icon>
+			</button>
+			<button mat-mini-fab class="icon-button" color="primary" (click)="goBack()">
+				<mat-icon aria-label="cancel entry">close</mat-icon>
+			</button>
+		</mat-card-actions>
+	</form>
+</mat-card>

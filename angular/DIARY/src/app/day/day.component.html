@@ -1,0 +1,24 @@
+<mat-toolbar>
+	<mat-toolbar-row>
+	<span class="menu-item" style="padding-bottom:0px !important;">
+		<mat-form-field class="mat-h2 full-width">
+			<input matInput [matDatepicker]="picker" [(ngModel)]="diaryDate">
+			<mat-datepicker-toggle matPrefix [for]="picker"></mat-datepicker-toggle>
+			<mat-datepicker #picker></mat-datepicker>
+		</mat-form-field>
+	</span>
+	<span class="icon-button">
+		<button mat-mini-fab color="primary" routerLink="/add-entry/{{ diaryDate | date:'MM-dd-yy' }}">
+			<mat-icon aria-label="Example icon-button with a heart icon">add</mat-icon>
+		</button>	
+	</span>
+	</mat-toolbar-row>
+</mat-toolbar>
+<br>
+<mat-card>
+	<mat-card-header>
+		<button mat-icon-button color="primary">
+			<mat-icon aria-label="Example icon-button with a heart icon">add</mat-icon>
+		</button>
+	</mat-card-header>
+</mat-card>
