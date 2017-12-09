@@ -2,8 +2,9 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
 import { catchError, map, tap } from 'rxjs/operators';
-
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+
+import { IEntry } from './entry.interface';
 
 @Injectable()
 export class EntryService {
@@ -12,7 +13,7 @@ export class EntryService {
 	
 	constructor(private http: HttpClient) { }
   
-	getEntries( myDate: string ): Observable<any> {
+	getEntries( myDate: string ): Observable<any>{
 		let myParams = new HttpParams().set('date', myDate);
 		return this.http.get(this.entryURL, {params: myParams})
 		.pipe(
@@ -20,9 +21,8 @@ export class EntryService {
 		));
 	}	
 	
-	createEntries( myDate: string ): Observable<any> {
-		let myParams = new HttpParams().set('date', myDate);
-		return this.http.post(this.entryURL, {params: myParams})
+	createEntries( myEntry: Object ): Observable<any> {
+		return this.http.post(this.entryURL, myEntry)
 		.pipe(
 			catchError(this.handleError('getEntries', [])
 		));

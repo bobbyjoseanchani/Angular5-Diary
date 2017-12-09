@@ -8,6 +8,7 @@
 			<mat-form-field class="full-width">
 				<textarea matInput placeholder="Text" formControlName="text"></textarea>
 			</mat-form-field>
+			<input type="hidden" formControlName="date"/> 
 		</mat-card-content>
 		<mat-card-actions>
 			<button mat-mini-fab class="icon-button" color="primary" type="submit" [disabled]="!entryForm.valid">

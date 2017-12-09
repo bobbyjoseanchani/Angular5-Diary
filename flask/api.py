@@ -51,6 +51,14 @@ class Entry(db.Model):
 			'day': self.day.date.strftime('%d-%m-%Y')
 		}
 
+# Set response headers to allow cross origin requests  
+@app.after_request
+def allow_cross_origin(response):
+  response.headers.add('Access-Control-Allow-Origin', '*')
+  response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+  response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
+  return response		
+
 ############################################################
 # 
 # API definitions for day
@@ -91,7 +99,7 @@ def manage_entries():
 			# Return success
 			response = jsonify(success = True)
 			response.status_code = 200
-			return response
+			return response	
 	elif request.method == 'GET':
 		my_entries = []
 		if request.args.get('date', None) is not None: 
@@ -101,19 +109,19 @@ def manage_entries():
 			if my_day is None:
 				response = jsonify(error = "Parameter error")
 				response.status_code = 400
-				return response, {'Access-Control-Allow-Origin': '*'} 		
+				return response		
 
 			# Get entries if they exist
 			my_day = db.session.query(Day).filter_by(date = my_day).first()
 			if my_day is not None:
 				my_entries = my_day.entries
 				
-			return jsonify(entries = [entry.serialize() for entry in my_entries]), 200, {'Access-Control-Allow-Origin': '*'} 	
+			return jsonify(entries = [entry.serialize() for entry in my_entries]), 200 	
 			
 		else:
 			response = jsonify(error = "Parameter error")
 			response.status_code = 400
-			return response,{'Access-Control-Allow-Origin': '*'} 		
+			return response		
 		
 def init_db():
     db.create_all()

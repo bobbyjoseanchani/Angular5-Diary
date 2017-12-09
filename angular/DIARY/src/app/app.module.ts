@@ -12,6 +12,7 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import { HttpClientModule }    from '@angular/common/http';
 import { DatePipe } from '@angular/common';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 
 import { AppComponent } from './app.component';
@@ -39,6 +40,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 	BrowserAnimationsModule,
 	MatIconModule,
 	MatToolbarModule,
+	MatExpansionModule,
 	AppRoutingModule,
 	ReactiveFormsModule,
 	HttpClientModule

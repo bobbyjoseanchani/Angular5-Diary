@@ -7,6 +7,7 @@ import { DayComponent } from './day/day.component'
 const routes: Routes = [
 	{ path: '', redirectTo: '/day', pathMatch: 'full' },
 	{ path: 'day', component: DayComponent},
+	{ path: 'day/:date', component: DayComponent},
 	{ path: 'add-entry/:date', component: AddEntryComponent}
 ];
 

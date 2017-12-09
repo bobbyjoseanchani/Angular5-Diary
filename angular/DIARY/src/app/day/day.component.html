@@ -1,24 +1,36 @@
 <mat-toolbar>
 	<mat-toolbar-row>
-	<span class="menu-item" style="padding-bottom:0px !important;">
+	<span class="menu-item">
 		<mat-form-field class="mat-h2 full-width">
-			<input matInput [matDatepicker]="picker" [(ngModel)]="diaryDate">
+			<input matInput [matDatepicker]="picker" [(ngModel)]="diaryDate" (dateChange)="getEntries(myDate.value)" #myDate>
 			<mat-datepicker-toggle matPrefix [for]="picker"></mat-datepicker-toggle>
 			<mat-datepicker #picker></mat-datepicker>
 		</mat-form-field>
 	</span>
 	<span class="icon-button">
-		<button mat-mini-fab color="primary" routerLink="/add-entry/{{ diaryDate | date:'MM-dd-yy' }}">
-			<mat-icon aria-label="Example icon-button with a heart icon">add</mat-icon>
+		<button mat-mini-fab color="primary" routerLink="/add-entry/{{ diaryDate | date:'yyyy-MM-dd' }}">
+			<mat-icon aria-label="create new entry for the date">add</mat-icon>
 		</button>	
 	</span>
 	</mat-toolbar-row>
 </mat-toolbar>
 <br>
-<mat-card>
-	<mat-card-header>
-		<button mat-icon-button color="primary">
-			<mat-icon aria-label="Example icon-button with a heart icon">add</mat-icon>
-		</button>
-	</mat-card-header>
-</mat-card>
+
+<mat-accordion>
+	<mat-expansion-panel *ngFor="let entry of entries">
+		<mat-expansion-panel-header>
+			<mat-panel-title class="mat-h3">
+				{{ entry.title }}
+			</mat-panel-title>
+			<mat-panel-description>
+			</mat-panel-description>
+		</mat-expansion-panel-header>
+		<p>
+			{{ entry.text }}
+		</p>
+		<mat-action-row>
+			<button mat-button color="warn" (click)="prevStep()">Previous</button>
+			<button mat-button color="primary" (click)="nextStep()">Next</button>
+		</mat-action-row>
+		</mat-expansion-panel>
+</mat-accordion>
