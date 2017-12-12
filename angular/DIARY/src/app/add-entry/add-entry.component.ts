@@ -28,12 +28,8 @@ export class AddEntryComponent implements OnInit {
 	) { }
 
 	ngOnInit(): void {
-		this.getDate();
-		this.entryForm.patchValue({date: this.myDate});
-	}
-	
-	getDate(): void {
 		this.myDate = this.route.snapshot.paramMap.get('date');
+		this.entryForm.patchValue({date: this.myDate});
 	}
 	
 	goBack(): void {
@@ -41,7 +37,6 @@ export class AddEntryComponent implements OnInit {
 	}
 	
 	saveEntry(): void{
-		console.log(this.entryForm.value);
 		this.entryService.createEntries( this.entryForm.value ).subscribe(
 			success => {
 				this.goBack();

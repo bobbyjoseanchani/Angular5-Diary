@@ -15,16 +15,16 @@ export class EntryService {
   
 	getEntries( myDate: string ): Observable<any>{
 		let myParams = new HttpParams().set('date', myDate);
-		return this.http.get(this.entryURL, {params: myParams})
+		return this.http.get<IEntry[]>(this.entryURL, {params: myParams})
 		.pipe(
-			catchError(this.handleError('getEntries', [])
-		));
+			catchError(this.handleError('getEntries', []))
+		);
 	}	
 	
-	createEntries( myEntry: Object ): Observable<any> {
+	createEntries( myEntry: IEntry ): Observable<any> {
 		return this.http.post(this.entryURL, myEntry)
 		.pipe(
-			catchError(this.handleError('getEntries', [])
+			catchError(this.handleError('create Entries', [])
 		));
 	}
 
@@ -35,5 +35,21 @@ export class EntryService {
 		  return of(result as T);
 		};
 	}
+
+	deleteEntries(myId: string): Observable<any> {
+		return this.http.delete(this.entryURL, {params: new HttpParams().set('id', myId)})
+		.pipe(
+			catchError(this.handleError('deleteEntries', [])
+		));
+	}	
+	/*
+	updateEntries( myEntry: IEntry ): Observable<any> {
+		return this.http.patch(this.entryURL, myEntry)
+		.pipe(
+			catchError(this.handleError('updateEntries', [])
+		));
+	}	
+
+	*/	
 	
 }
