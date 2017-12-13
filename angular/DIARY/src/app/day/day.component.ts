@@ -34,16 +34,16 @@ export class DayComponent implements OnInit {
     this.getEntries();
   }
 
+  /** Get entries for the date */
   getEntries(): void {
     let dateString = this.datepipe.transform(this.diaryDate, 'yyyy-MM-dd');
-    this.entryService.getEntries(dateString).subscribe(myEntries => {
-      console.log(myEntries.entries);
+    this.entryService.getEntries({'date': dateString}).subscribe(myEntries => {
       this.entries = myEntries.entries;
     });
   }
 
+  /** Given id, delete the entry*/
   deleteEntries(myId: string): void{
-    console.log('deleting entry '+myId);
     this.entryService.deleteEntries(myId).subscribe(
       success => {
         this.getEntries();

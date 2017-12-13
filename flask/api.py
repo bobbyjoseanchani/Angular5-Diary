@@ -73,7 +73,7 @@ def allow_cross_origin(response):
     response.headers.add('Access-Control-Allow-Headers',
                          'Content-Type,Authorization')
     response.headers.add('Access-Control-Allow-Methods',
-                         'GET,PUT,POST,DELETE,OPTIONS')
+                         'GET,PUT,POST,DELETE,OPTIONS, PATCH')
     return response
 
 ############################################################
@@ -91,10 +91,11 @@ def get_day():
     return jsonify(day=my_day)
 
 
-@app.route('/entry', methods=['GET', 'POST', 'DELETE'])
+@app.route('/entry', methods=['GET', 'POST', 'DELETE', 'PATCH'])
 def manage_entries():
     """ Function to manage diary entries
     """
+    print( 'Inside manage entries' )
     if request.method == 'POST':
         if request.get_json() is not None:
             # Read inputs
@@ -126,27 +127,22 @@ def manage_entries():
             return response
     elif request.method == 'GET':
         my_entries = []
-        if request.args.get('date', None) is not None:
-            my_day = datetime.strptime(
-                request.args.get('date', None), "%Y-%M-%d").date()
-
-            # Check for input date
-            if my_day is None:
-                response = jsonify(error="Parameter error")
-                response.status_code = 400
-                return response
-
-            # Get entries if they exist
-            my_day = db.session.query(Day).filter_by(date=my_day).first()
-            if my_day is not None:
-                my_entries = my_day.entries
-
-            return jsonify(entries=[entry.serialize() for entry in my_entries]), 200
-
-        else:
+        my_day = request.args.get('date', None)
+        my_id = request.args.get('id', None)
+        if my_day is None and my_id is None:
+            print(my_day, my_id)
             response = jsonify(error="Parameter error")
             response.status_code = 400
             return response
+        else:
+            if my_id is not None:
+                my_entries = db.session.query(Entry).filter_by(id = my_id).all()
+            elif my_day is not None:
+                my_day = datetime.strptime( my_day, "%Y-%M-%d").date()
+                my_day = db.session.query(Day).filter_by(date=my_day).first()
+                if my_day is not None:
+                    my_entries = my_day.entries
+            return jsonify(entries=[entry.serialize() for entry in my_entries]), 200
     elif request.method == 'DELETE':
         my_id = request.args.get('id', None)
         if my_id is not None:
@@ -159,10 +155,34 @@ def manage_entries():
             response = jsonify(error="Parameter error")
             response.status_code = 400
             return response
+    elif request.method == 'PATCH':
+        parameter_error = False
+        if request.get_json() is not None:
+            # Read inputs
+            my_title = request.get_json().get("title", None)
+            my_text = request.get_json().get("text", None)
+            my_id = request.get_json().get('id', None)
+            if my_id is not None:
+                my_entry = db.session.query(Entry).filter_by(id = my_id).first()
+                if my_entry is not None:
+                    my_entry.title = my_title
+                if my_text is not None:    
+                    my_entry.text = my_text     
+                db.session.commit()
+                response = jsonify(success=True)
+                response.status_code = 200
+                return response
+            else:
+                parameter_error = True
+        else:
+            parameter_error = True                    
+        if parameter_error:
+            # if input parameters are missing return appropriate message
+            response = jsonify(error="Parameter error")
+            response.status_code = 400
+            return response
               
      
-    
-
 def init_db():
     """ Initialize database and apply schema changes.
     Called by init_db command
